@@ -1,0 +1,9 @@
+{
+	"apiKey": "AIzaSyBxuoXm3ht8X5s08bi_7Agx5F3od6p-Erk",
+	"authDomain": "uni-applications-tracker.firebaseapp.com",
+	"projectId": "uni-applications-tracker",
+	"storageBucket": "uni-applications-tracker.appspot.com",
+	"messagingSenderId": "592447370337",
+	"appId": "1:592447370337:web:9a02ad53beb2d71585e620",
+	"databaseURL": "https://uni-applications-tracker-default-rtdb.asia-southeast1.firebasedatabase.app"
+}
