@@ -26,12 +26,13 @@ export default function MainContent() {
 }
 
 function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
-	const { database } = useContext(FirebaseContext)
+	const { user, database } = useContext(FirebaseContext)
 	const closeUniversityModal = () => setShowUniversityModal(false)
 	const formRef = useRef()
 	const addUniversity = e => {
 		e.preventDefault()
-		const URL = `/universities/${push(child(ref(database), 'universities')).key}`
+		const path = `/users/${user.uid}/universities/`
+		const URL = `${path}${push(child(ref(database), path)).key}`
 		const updates = {
 			[URL]: {
 				university: formRef.current.university.value,

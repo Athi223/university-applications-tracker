@@ -6,8 +6,8 @@ import { FirebaseContext } from '../Contexts/FirebaseContext'
 import { Button } from 'react-bootstrap'
 
 export default function Universities() {
-	const { database } = useContext(FirebaseContext)
-	const [snapshots, loading, error] = useList(ref(database, 'universities'))
+	const { user, database } = useContext(FirebaseContext)
+	const [snapshots, loading, error] = useList(ref(database, `/users/${user.uid}/universities/`))
 	const colorRequirements = requirement => {
 		let style
 		if(requirement.includes("Not")) style = "danger"
@@ -36,15 +36,29 @@ export default function Universities() {
 	}
 
 	const colorDeadline = (difference, status) => {
-		if(difference < 0 || status === "Applied") return ""
-		if(difference < 15) return "danger"
-		if(difference < 30) return "warning"
-		else return "success"
+		let textStyle, bgStyle
+		if(difference < 0 || status === "Applied") {
+			textStyle = "muted"
+			bgStyle = ""
+		}
+		else if(difference < 15) {
+			textStyle = "light"
+			bgStyle = "danger"
+		}
+		else if(difference < 30) {
+			textStyle = "dark"
+			bgStyle = "warning"
+		}
+		else {
+			textStyle = "light"
+			bgStyle = "success"
+		}
+		return `text-${textStyle} bg-${bgStyle}`
 	}
 
 	const removeUniversity = (university, key) => {
 		if(confirm(`Do you really want to remove ${university} from the list?`)) {
-			set(ref(database, 'universities/' + key), null)
+			set(ref(database, `/users/${user.uid}/universities/` + key), null)
 		}
 	}
 
@@ -80,7 +94,7 @@ export default function Universities() {
 									<td>{index}</td>
 									<td>{data.university}</td>
 									<td>{colorRequirements(data.status)}</td>
-									<td className={`bg-${colorDeadline(difference, data.status)}`}>{deadline.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+									<td className={colorDeadline(difference, data.status)}>{deadline.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
 									<td>{colorRequirements(data.sop)}</td>
 									<td>{colorRequirements(data.history)}</td>
 									<td>{colorRequirements(data.lor1)}</td>
@@ -89,7 +103,7 @@ export default function Universities() {
 									<td>$ {data.fees}</td>
 									<td>{colorRequirements(data.feestatus)}</td>
 									<td>
-										<Button variant="info" size="sm">✏</Button>{" "}
+										<Button variant="info" size="sm" disabled>✏</Button>{" "}
 										<Button variant="danger" size="sm" onClick={
 											() => removeUniversity(data.university, value.key)
 										}>🗑</Button>
