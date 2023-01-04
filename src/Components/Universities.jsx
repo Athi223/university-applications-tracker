@@ -63,11 +63,10 @@ export default function Universities() {
 	}
 
 	return (
-		<div className="table-responsive my-5">
+		<div className="table-responsive">
 			<Table bordered>
 				<thead className="table-dark">
 					<tr>
-						<th>#</th>
 						<th>University</th>
 						<th>Status</th>
 						<th>Deadline</th>
@@ -85,13 +84,12 @@ export default function Universities() {
 					{error && <tr><td colSpan={3}><strong>Error: {error}</strong></td></tr>}
 					{error && <tr><td colSpan={3}><strong>Loading...</strong></td></tr>}
 					{!loading && snapshots && (
-						snapshots.map((value, index) => {
-							const data = value.val()
+						snapshots.map(v => {
+							const data = v.val()
 							const deadline = new Date(data.deadline)
 							const difference = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24))
 							return (
-								<tr className={colorRowType(data.type)} key={index}>
-									<td>{index}</td>
+								<tr className={colorRowType(data.type)} key={v.key}>
 									<td>{data.university}</td>
 									<td>{colorRequirements(data.status)}</td>
 									<td className={colorDeadline(difference, data.status)}>{deadline.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</td>
@@ -105,7 +103,7 @@ export default function Universities() {
 									<td>
 										<Button variant="info" size="sm" disabled>✏</Button>{" "}
 										<Button variant="danger" size="sm" onClick={
-											() => removeUniversity(data.university, value.key)
+											() => removeUniversity(data.university, v.key)
 										}>🗑</Button>
 									</td>
 								</tr>
