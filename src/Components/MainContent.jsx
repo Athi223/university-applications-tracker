@@ -63,6 +63,7 @@ function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
 				feestatus: formRef.current.feestatus.value,
 				gre: formRef.current.gre.value,
 				toefl: formRef.current.toefl.value,
+				result: "Pending",
 			},
 		}
 		formRef.current.reset()
