@@ -1,18 +1,14 @@
 import { useContext, useRef, useState } from "react"
 import { FirebaseContext } from "../Contexts/FirebaseContext"
-import Modal from 'react-bootstrap/Modal'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { Button, Card, Form, InputGroup, Modal } from "react-bootstrap"
 import Universities from "./Universities"
 import { ref, child, push, update } from "firebase/database"
 import Costs from "./Costs"
-import { Card } from "react-bootstrap"
 
 export default function MainContent() {
 	const { user } = useContext(FirebaseContext)
-	const [ showUniversityModal, setShowUniversityModal ] = useState(false)
-	const [ page, setPage ] = useState(false)
+	const [showUniversityModal, setShowUniversityModal] = useState(false)
+	const [page, setPage] = useState(false)
 
 	return (
 		<>
@@ -57,7 +53,7 @@ function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
 				university: formRef.current.university.value,
 				type: formRef.current.type.value,
 				status: formRef.current.status.value,
-				deadline : formRef.current.deadline.value,
+				deadline: formRef.current.deadline.value,
 				sop: formRef.current.sop.value,
 				lor1: formRef.current.lor1.value,
 				lor2: formRef.current.lor2.value,
@@ -65,10 +61,11 @@ function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
 				history: formRef.current.history.value,
 				fees: parseFloat(formRef.current.fees.value),
 				feestatus: formRef.current.feestatus.value,
-				gre: formRef.current.gre.checked,
-				toefl: formRef.current.toefl.checked,
-			}
+				gre: formRef.current.gre.value,
+				toefl: formRef.current.toefl.value,
+			},
 		}
+		formRef.current.reset()
 		return update(ref(database), updates)
 	}
 
@@ -87,18 +84,18 @@ function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
 							<option value="Ambitious">Ambitious</option>
 						</Form.Select>
 					</InputGroup>
-					<Form.Group className="mb-2" controlId="status">
-						<Form.Label>Application Status</Form.Label>
-						<Form.Select required>
+					<InputGroup className="mb-2">
+						<InputGroup.Text>Application Status</InputGroup.Text>
+						<Form.Select id="status" required>
 							<option value="Not Applied">Not Applied</option>
 							<option value="In Process">In Process</option>
 							<option value="Applied">Applied</option>
 						</Form.Select>
-					</Form.Group>
-					<Form.Group className="mb-2" controlId="deadline">
-						<Form.Label>Application Deadline</Form.Label>
-						<Form.Control type="date" placeholder="Application Deadline" required />
-					</Form.Group>
+					</InputGroup>
+					<InputGroup className="mb-2">
+						<InputGroup.Text>Application Deadline</InputGroup.Text>
+						<Form.Control id="deadline" type="date" placeholder="Application Deadline" required />
+					</InputGroup>
 					<InputGroup className="mb-2">
 						<InputGroup.Text>Statement of Purpose</InputGroup.Text>
 						<Form.Select id="sop" required>
@@ -140,17 +137,32 @@ function AddUniversity({ showUniversityModal, setShowUniversityModal }) {
 						</Form.Select>
 					</InputGroup>
 					<InputGroup className="mb-2">
-						<Form.Control type="number" min={0} max={1000} placeholder="Application Fees in $" id="fees" required />
+						<Form.Control
+							type="number"
+							min={0}
+							max={1000}
+							placeholder="Application Fees in $"
+							id="fees"
+							required
+						/>
 						<Form.Select id="feestatus" required>
 							<option value="Not Paid">Not Paid</option>
 							<option value="Paid">Paid</option>
 						</Form.Select>
 					</InputGroup>
 					<InputGroup className="mb-2">
-						<InputGroup.Text>GRE Score Required?</InputGroup.Text>
-						<InputGroup.Checkbox id="gre" />
-						<InputGroup.Text className="ms-auto">TOEFL Score Required?</InputGroup.Text>
-						<InputGroup.Checkbox id="toefl" />
+						<InputGroup.Text>GRE:</InputGroup.Text>
+						<Form.Select id="gre" required>
+							<option value="Not Required">Not Required</option>
+							<option value="Score Not Sent">Score Not Sent</option>
+							<option value="Score Sent">Score Sent</option>
+						</Form.Select>
+						<InputGroup.Text>TOEFL:</InputGroup.Text>
+						<Form.Select id="toefl" required>
+							<option value="Not Required">Not Required</option>
+							<option value="Score Not Sent">Score Not Sent</option>
+							<option value="Score Sent">Score Sent</option>
+						</Form.Select>
 					</InputGroup>
 					<div className="text-center">
 						<Button variant="primary" type="submit">
