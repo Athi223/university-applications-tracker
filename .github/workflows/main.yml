@@ -2,7 +2,7 @@ name: Auto Deploy on Push
 on:
   push:
     branches:
-      - main
+      - master
       
 permissions:
   contents: write
