@@ -13,6 +13,8 @@ jobs:
   build:
     name: Builder
     runs-on: ubuntu-latest
+    environment: 
+      name: github-pages
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -32,7 +34,7 @@ jobs:
         with:
           cmd: build # will run `yarn build` command
         env:
-          VITE_FREECURRENCYAPI_KEY: unkAd0XMvESoeeZyCNOmn32KCSqJnkPxbH8mPmuI
+          VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
           
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
