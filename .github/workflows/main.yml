@@ -32,7 +32,7 @@ jobs:
         with:
           cmd: build # will run `yarn build` command
         env:
-          VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
+          VITE_FREECURRENCYAPI_KEY: unkAd0XMvESoeeZyCNOmn32KCSqJnkPxbH8mPmuI
           
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
