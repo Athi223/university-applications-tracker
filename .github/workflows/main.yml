@@ -5,9 +5,6 @@ on:
       - master
     paths-ignore:
       - '**/README.md'
-      
-env:
-  VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
 
 permissions:
   contents: write
@@ -34,6 +31,11 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: build # will run `yarn build` command
+      
+      - name: Generate .env
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
           
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
