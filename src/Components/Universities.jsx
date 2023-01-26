@@ -1,17 +1,16 @@
-import { useList } from "react-firebase-hooks/database"
 import Table from "react-bootstrap/Table"
 import { useContext, useEffect, useState } from "react"
 import { ref, set, update } from "firebase/database"
-import { FirebaseContext } from "../Contexts/FirebaseContext"
+import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
+import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
 import { Button, InputGroup, Form, Modal, OverlayTrigger, Tooltip } from "react-bootstrap"
 import { Check, Edit, Slash, Trash, X } from "react-feather"
 
 export default function Universities() {
-	const { user, database } = useContext(FirebaseContext)
+	const { user } = useContext(FirebaseAuthContext)
+	const { database, universities } = useContext(FirebaseDBContext)
 	const [currentUniversity, setCurrentUniversity] = useState(null)
-	const [snapshots, loading, error] = useList(ref(database, `/users/${user.uid}/universities/`))
 	const [showUniversityModal, setShowUniversityModal] = useState(false)
-	const today = new Date()
 
 	const colorRequirements = requirement => {
 		let style
@@ -76,8 +75,8 @@ export default function Universities() {
 		}
 	}
 
-	const updateUniversity = data => {
-		setCurrentUniversity(data)
+	const updateUniversity = university => {
+		setCurrentUniversity(university)
 		setShowUniversityModal(true)
 	}
 
@@ -101,92 +100,73 @@ export default function Universities() {
 					</tr>
 				</thead>
 				<tbody>
-					{error && (
-						<tr>
-							<td colSpan={3}>
-								<strong>Error: {error}</strong>
-							</td>
-						</tr>
-					)}
-					{error && (
-						<tr>
-							<td colSpan={3}>
-								<strong>Loading...</strong>
-							</td>
-						</tr>
-					)}
-					{!loading &&
-						snapshots &&
-						snapshots.map(v => {
-							const data = v.val()
-							const deadline = new Date(data.deadline)
-							const difference = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24))
-							return (
-								<tr className={colorRowType(data.type)} key={v.key}>
-									<td>{data.university}</td>
-									<td>{colorRequirements(data.status)}</td>
-									<td className={colorDeadline(difference, data.status)}>
-										{deadline.toLocaleDateString(undefined, {
-											year: "numeric",
-											month: "short",
-											day: "numeric",
-										})}
-									</td>
-									<td>
-										<OverlayTrigger
-											placement="right"
-											overlay={<Tooltip>{colorRequirements(data.sop)}</Tooltip>}>
-											{colorIcons(data.sop)}
-										</OverlayTrigger>
-									</td>
-									<td>
-										<OverlayTrigger
-											placement="right"
-											overlay={<Tooltip>{colorRequirements(data.history)}</Tooltip>}>
-											{colorIcons(data.history)}
-										</OverlayTrigger>
-									</td>
-									<td>
-										<OverlayTrigger
-											placement="right"
-											overlay={<Tooltip>{colorRequirements(data.lor1)}</Tooltip>}>
-											{colorIcons(data.lor1)}
-										</OverlayTrigger>
-									</td>
-									<td>
-										<OverlayTrigger
-											placement="right"
-											overlay={<Tooltip>{colorRequirements(data.lor2)}</Tooltip>}>
-											{colorIcons(data.lor2)}
-										</OverlayTrigger>
-									</td>
-									<td>
-										<OverlayTrigger
-											placement="right"
-											overlay={<Tooltip>{colorRequirements(data.lor3)}</Tooltip>}>
-											{colorIcons(data.lor3)}
-										</OverlayTrigger>
-									</td>
-									<td className="text-end">$ {data.fees}</td>
-									<td>{colorRequirements(data.feestatus)}</td>
-									<td>{colorRequirements(data.result)}</td>
-									<td>
-										<Button
-											variant="info"
-											size="sm"
-											onClick={() => updateUniversity({ ...data, key: v.key })}>
-											<Edit />
-										</Button>{" "}
-										<Button
-											variant="danger"
-											size="sm"
-											onClick={() => removeUniversity(data.university, v.key)}>
-											<Trash />
-										</Button>
-									</td>
-								</tr>
-							)
-						})}
+					{universities.map(university => {
+						return (
+							<tr className={colorRowType(university.type)} key={university.key}>
+								<td>{university.university}</td>
+								<td>{colorRequirements(university.status)}</td>
+								<td className={colorDeadline(university.difference, university.status)}>
+									{university.deadline.toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "short",
+										day: "numeric",
+									})}
+								</td>
+								<td>
+									<OverlayTrigger
+										placement="right"
+										overlay={<Tooltip>{colorRequirements(university.sop)}</Tooltip>}>
+										{colorIcons(university.sop)}
+									</OverlayTrigger>
+								</td>
+								<td>
+									<OverlayTrigger
+										placement="right"
+										overlay={<Tooltip>{colorRequirements(university.history)}</Tooltip>}>
+										{colorIcons(university.history)}
+									</OverlayTrigger>
+								</td>
+								<td>
+									<OverlayTrigger
+										placement="right"
+										overlay={<Tooltip>{colorRequirements(university.lor1)}</Tooltip>}>
+										{colorIcons(university.lor1)}
+									</OverlayTrigger>
+								</td>
+								<td>
+									<OverlayTrigger
+										placement="right"
+										overlay={<Tooltip>{colorRequirements(university.lor2)}</Tooltip>}>
+										{colorIcons(university.lor2)}
+									</OverlayTrigger>
+								</td>
+								<td>
+									<OverlayTrigger
+										placement="right"
+										overlay={<Tooltip>{colorRequirements(university.lor3)}</Tooltip>}>
+										{colorIcons(university.lor3)}
+									</OverlayTrigger>
+								</td>
+								<td className="text-end">$ {university.fees}</td>
+								<td>{colorRequirements(university.feestatus)}</td>
+								<td>{colorRequirements(university.result)}</td>
+								<td>
+									<Button
+										variant="info"
+										size="sm"
+										onClick={() => updateUniversity({ ...university, key: v.key })}>
+										<Edit />
+									</Button>{" "}
+									<Button
+										variant="danger"
+										size="sm"
+										onClick={() => removeUniversity(university.university, v.key)}>
+										<Trash />
+									</Button>
+								</td>
+							</tr>
+						)
+					})}
 				</tbody>
 			</Table>
 			<UpdateUniversity
@@ -199,7 +179,8 @@ export default function Universities() {
 }
 
 function UpdateUniversity({ showUniversityModal, setShowUniversityModal, currentUniversity }) {
-	const { user, database } = useContext(FirebaseContext)
+	const { user } = useContext(FirebaseAuthContext)
+	const { database } = useContext(FirebaseDBContext)
 	const closeUniversityModal = () => setShowUniversityModal(false)
 	const [form, setForm] = useState(null)
 	useEffect(
