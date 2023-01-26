@@ -1,12 +1,11 @@
-import { useList } from "react-firebase-hooks/database"
 import Table from "react-bootstrap/Table"
 import { useContext } from "react"
-import { ref } from "firebase/database"
-import { FirebaseContext } from "../Contexts/FirebaseContext"
+import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
+import currencies from "../currencies.json"
 
-export default function Costs() {
-	const { user, database } = useContext(FirebaseContext)
-	const [snapshots, loading, error] = useList(ref(database, `/users/${user.uid}/universities/`))
+export default function Costs({ currency, exchangeRates }) {
+	const { costs } = useContext(FirebaseDBContext)
+
 	let grand_total = 0
 
 	const colorRowType = type => {
@@ -53,52 +52,44 @@ export default function Costs() {
 						<th>University</th>
 						<th>GRE</th>
 						<th>TOEFL</th>
-						<th>Fees</th>
-						<th>Total</th>
+						<th className="text-end">Fees (USD)</th>
+						<th className="text-end">Fees ({currency})</th>
+						<th className="text-end">Total (USD)</th>
+						<th className="text-end">Total ({currency})</th>
 					</tr>
 				</thead>
 				<tbody>
-					{error && (
-						<tr>
-							<td colSpan={3}>
-								<strong>Error: {error}</strong>
-							</td>
-						</tr>
-					)}
-					{error && (
-						<tr>
-							<td colSpan={3}>
-								<strong>Loading...</strong>
-							</td>
-						</tr>
-					)}
-					{!loading &&
-						snapshots &&
-						snapshots.map(v => {
-							const data = v.val()
-							const total =
-								data.fees +
-								(data.gre !== "Not Required" ? 30 : 0) +
-								(data.toefl !== "Not Required" ? 20 : 0)
-							grand_total += total
-							return (
-								<tr className={colorRowType(data.type)} key={v.key}>
-									<td>{data.university}</td>
-									<td className={colorTestStatus(data.gre)}>{data.gre}</td>
-									<td className={colorTestStatus(data.toefl)}>{data.toefl}</td>
-									<td className="text-end">$ {data.fees}</td>
-									<td className="text-end">$ {total}</td>
-								</tr>
-							)
-						})}
-					{!loading && snapshots && (
-						<tr className="table-dark">
-							<th className="text-center" colSpan={4}>
-								Grand Total
-							</th>
-							<th className="text-end">$ {grand_total}</th>
-						</tr>
-					)}
+					{costs.map(cost => {
+						const total =
+							cost.fees +
+							(cost.gre !== "Not Required" ? 30 : 0) +
+							(cost.toefl !== "Not Required" ? 20 : 0)
+						grand_total += total
+						return (
+							<tr className={colorRowType(cost.type)} key={cost.key}>
+								<td>{cost.university}</td>
+								<td className={colorTestStatus(cost.gre)}>{cost.gre}</td>
+								<td className={colorTestStatus(cost.toefl)}>{cost.toefl}</td>
+								<td className="text-end">$ {cost.fees}</td>
+								<td className="text-end">
+									{currencies[currency]} {(cost.fees * exchangeRates[currency]).toFixed(2)}
+								</td>
+								<td className="text-end">$ {total}</td>
+								<td className="text-end">
+									{currencies[currency]} {(total * exchangeRates[currency]).toFixed(2)}
+								</td>
+							</tr>
+						)
+					})}
+					<tr className="table-dark">
+						<th className="text-center" colSpan={5}>
+							Grand Total
+						</th>
+						<th className="text-end">$ {grand_total}</th>
+						<th className="text-end">
+							{currencies[currency]} {(grand_total * exchangeRates[currency]).toFixed(2)}
+						</th>
+					</tr>
 				</tbody>
 			</Table>
 		</div>
