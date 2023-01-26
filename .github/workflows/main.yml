@@ -33,7 +33,7 @@ jobs:
           cmd: build # will run `yarn build` command
       
       - name: Generate .env
-        uses: SpicyPizza/create-envfile@v1.3
+        uses: SpicyPizza/create-envfile@v1.2
         with:
           envkey_VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
           
