@@ -33,9 +33,10 @@ jobs:
           cmd: build # will run `yarn build` command
       
       - name: Generate .env
-        uses: SpicyPizza/create-envfile@v1.2
+        uses: varunkumar/create-env-action@v1
         with:
-          envkey_VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
+          env: |
+            VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
           
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
