@@ -6,6 +6,9 @@ on:
     paths-ignore:
       - '**/README.md'
       
+env:
+  VITE_FREECURRENCYAPI_KEY: ${{ secrets.VITE_FREECURRENCYAPI_KEY }}
+
 permissions:
   contents: write
 
