@@ -1,6 +1,6 @@
 # University Applications Tracker
 
-### A React App to track the Status of University Applications.
+> A React App to track the Status of University Applications.
 
 ## You can track the following details using this app:
 
