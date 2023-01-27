@@ -1,13 +1,12 @@
-import "bootstrap/dist/css/bootstrap.min.css"
 import { useState } from "react"
+import { FirebaseAuthContext } from "./Contexts/FirebaseAuthContext"
+import { FirebaseDBContext } from "./Contexts/FirebaseDBContext"
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getDatabase } from "firebase/database"
 import { useAuthState } from "react-firebase-hooks/auth"
 import Authentication from "./Components/Authentication"
 import MainContent from "./Components/MainContent"
-import { FirebaseAuthContext } from "./Contexts/FirebaseAuthContext"
-import { FirebaseDBContext } from "./Contexts/FirebaseDBContext"
 
 // Your web app's Firebase configuration
 import firebaseConfig from "./firebaseConfig.json"
