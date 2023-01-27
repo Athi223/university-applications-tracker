@@ -1,12 +1,11 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useRef, useState, useEffect } from "react"
 import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
-import { Button, Card, Form, InputGroup, Modal } from "react-bootstrap"
 import { useList } from "react-firebase-hooks/database"
 import { ref, child, push, update } from "firebase/database"
+import { Button, Card, Form, InputGroup, Modal } from "react-bootstrap"
 import Universities from "./Universities"
 import Costs from "./Costs"
-import { useEffect } from "react"
 import currencies from "../currencies.json"
 
 export default function MainContent() {

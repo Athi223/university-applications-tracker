@@ -1,6 +1,6 @@
-import Table from "react-bootstrap/Table"
 import { useContext } from "react"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
+import { Table } from "react-bootstrap"
 import currencies from "../currencies.json"
 
 export default function Costs({ currency, exchangeRates }) {

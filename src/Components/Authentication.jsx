@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { useSignInWithGoogle, useSignOut } from "react-firebase-hooks/auth"
-import Button from "react-bootstrap/Button"
+import { Button } from "react-bootstrap"
 
 export default function Authentication() {
 	const { user } = useContext(FirebaseAuthContext)
