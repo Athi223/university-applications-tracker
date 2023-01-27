@@ -7,7 +7,7 @@
 | Page         | Deadline | SOP     | History | LOR     | Fees    | Fee status | GRE Score | TOEFL Score | Total Cost |
 | ------------ | -------- | ------- | ------- | ------- | ------- | ---------- | --------- | ----------- | ---------- |
 | Applications | &check;  | &check; | &check; | &check; | &check; | &check;    | &cross;   | &cross;     | &cross;    |
-| Costs        | &cross;  | &cross; | &cross; | &cross; | &cross; | &cross;    | &check;   | &check;     | &check;    |
+| Costs        | &cross;  | &cross; | &cross; | &cross; | &check; | &cross;    | &check;   | &check;     | &check;    |
 
 ## Built using:
 
