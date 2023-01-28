@@ -82,8 +82,8 @@ export default function Universities() {
 	}
 
 	return (
-		<div className="table-responsive">
-			<Table bordered>
+		<>
+			<Table bordered responsive>
 				<thead className="table-dark">
 					<tr>
 						<th>University</th>
@@ -175,6 +175,6 @@ export default function Universities() {
 				setShowUniversityModal={setShowUniversityModal}
 				currentUniversity={currentUniversity}
 			/>
-		</div>
+		</>
 	)
 }
