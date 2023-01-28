@@ -69,36 +69,44 @@ export default function MainContent() {
 
 	return (
 		<>
-			<div className="d-flex justify-content-between">
-				<h4>Welcome, {user.displayName}</h4>
-				<div className="row">
-					<div className="col">
-						<p>Applications</p>
-					</div>
-					<div className="col">
-						<Form.Check type="switch" value={page} onChange={() => setPage(prev => !prev)} />
-					</div>
-					<div className="col">
-						<p>Costs</p>
+			<div className="row">
+				<div className="col">
+					<h4>Welcome, {user.displayName}</h4>
+				</div>
+				<div className="col-auto">
+					<div className="row justify-content-center">
+						<div className="col">
+							<p>Applications</p>
+						</div>
+						<div className="col">
+							<Form.Check type="switch" value={page} onChange={() => setPage(prev => !prev)} />
+						</div>
+						<div className="col">
+							<p>Costs</p>
+						</div>
 					</div>
 				</div>
-				<div className="row">
-					<div className="col-auto">
-						<button className="btn btn-primary" onClick={() => setShowUniversityModal(true)}>
-							Add University
-						</button>
-					</div>
-					<div className="col">
-						<Form.Select
-							aria-label="Select Currency"
-							value={currency}
-							onChange={e => setCurrency(e.target.value)}>
-							{Object.keys(currencies).map(v => (
-								<option key={v} value={v}>
-									{v}
-								</option>
-							))}
-						</Form.Select>
+				<div className="col">
+					<div className="row justify-content-end">
+						{page && (
+							<div className="col-auto">
+								<Form.Select
+									aria-label="Select Currency"
+									value={currency}
+									onChange={e => setCurrency(e.target.value)}>
+									{Object.keys(currencies).map(v => (
+										<option key={v} value={v}>
+											{v}
+										</option>
+									))}
+								</Form.Select>
+							</div>
+						)}
+						<div className="col-auto">
+							<button className="btn btn-primary" onClick={() => setShowUniversityModal(true)}>
+								Add University
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
