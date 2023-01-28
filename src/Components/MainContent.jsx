@@ -3,7 +3,7 @@ import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
 import { useList } from "react-firebase-hooks/database"
 import { ref } from "firebase/database"
-import { Card, Form } from "react-bootstrap"
+import { Button, Card, Form } from "react-bootstrap"
 import Universities from "./Universities"
 import Costs from "./Costs"
 import AddUniversity from "./AddUniversity"
@@ -103,9 +103,9 @@ export default function MainContent() {
 							</div>
 						)}
 						<div className="col-auto">
-							<button className="btn btn-primary" onClick={() => setShowUniversityModal(true)}>
+							<Button variant="outline-primary" onClick={() => setShowUniversityModal(true)}>
 								Add University
-							</button>
+							</Button>
 						</div>
 					</div>
 				</div>
