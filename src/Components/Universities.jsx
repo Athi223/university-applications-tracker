@@ -4,7 +4,7 @@ import { ref, set } from "firebase/database"
 import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap"
-import { Check, Edit, Slash, Trash, X } from "react-feather"
+import { Activity, Check, Edit, Slash, ThumbsDown, ThumbsUp, Trash, X } from "react-feather"
 import UpdateUniversity from "./UpdateUniversity"
 
 export default function Universities() {
@@ -21,12 +21,43 @@ export default function Universities() {
 		return <span className={`fw-semibold text-${style}`}>{requirement}</span>
 	}
 
+	const colorResult = result => {
+		switch (result) {
+			case "Accepted":
+				return (
+					<span className="border border-success border-2 rounded-circle p-1 pb-2 align-middle">
+						<ThumbsUp className="text-success" />
+					</span>
+				)
+			case "Rejected":
+				return (
+					<span className="border border-danger border-2 rounded-circle p-1 pb-2 align-middle">
+						<ThumbsDown className="text-danger" />
+					</span>
+				)
+			default:
+				return (
+					<span className="border border-primary border-2 rounded-circle p-1 pb-2 align-middle">
+						<Activity className="text-primary" />
+					</span>
+				)
+		}
+	}
+
 	const colorIcons = requirement => {
 		switch (requirement) {
 			case "Not Submitted":
-				return <X className="text-danger" />
+				return (
+					<span className="border border-danger border-2 rounded-circle pb-1 align-middle">
+						<X className="text-danger" />
+					</span>
+				)
 			case "Submitted":
-				return <Check className="text-success" />
+				return (
+					<span className="border border-success border-2 rounded-circle pb-1 align-middle">
+						<Check className="text-success" />
+					</span>
+				)
 			case "N/A":
 				return <Slash className="text-primary" />
 			default:
@@ -150,7 +181,13 @@ export default function Universities() {
 								</td>
 								<td className="text-end">$ {university.fees}</td>
 								<td>{colorRequirements(university.feestatus)}</td>
-								<td>{colorRequirements(university.result)}</td>
+								<td>
+									<OverlayTrigger
+										placement="left"
+										overlay={<Tooltip>{colorRequirements(university.result)}</Tooltip>}>
+										{colorResult(university.result)}
+									</OverlayTrigger>
+								</td>
 								<td>
 									<Button
 										variant="info"
