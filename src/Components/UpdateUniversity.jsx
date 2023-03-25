@@ -4,7 +4,7 @@ import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
 import { Button, InputGroup, Form, Modal } from "react-bootstrap"
 
-export default function UpdateUniversity({ showUniversityModal, setShowUniversityModal, currentUniversity }) {
+export default function UpdateUniversity({ showUniversityModal, setShowUniversityModal, currentUniversity, setToast }) {
 	const { user } = useContext(FirebaseAuthContext)
 	const { database } = useContext(FirebaseDBContext)
 	const closeUniversityModal = () => setShowUniversityModal(false)
@@ -62,7 +62,26 @@ export default function UpdateUniversity({ showUniversityModal, setShowUniversit
 				result: form.result,
 			},
 		}
-		return update(ref(database), updates)
+		update(ref(database), updates)
+			.then(() => {
+				closeUniversityModal()
+				setToast({
+					show: true,
+					title: "Update Successful",
+					content: (
+						<>
+							Successfully updated details for : <b>{form.university}</b>
+							<br />
+							Please{" "}
+							<Button size="sm" onClick={() => window.location.reload()}>
+								Refresh
+							</Button>{" "}
+							to view latest details
+						</>
+					),
+				})
+			})
+			.catch(e => console.error(e))
 	}
 
 	return (
