@@ -7,7 +7,7 @@ import { Button, OverlayTrigger, Tooltip } from "react-bootstrap"
 import { Activity, Check, Edit, Slash, ThumbsDown, ThumbsUp, Trash, X } from "react-feather"
 import UpdateUniversity from "./UpdateUniversity"
 
-export default function Universities() {
+export default function Universities({ setToast }) {
 	const { user } = useContext(FirebaseAuthContext)
 	const { database, universities } = useContext(FirebaseDBContext)
 	const [currentUniversity, setCurrentUniversity] = useState(null)
@@ -211,6 +211,7 @@ export default function Universities() {
 				showUniversityModal={showUniversityModal}
 				setShowUniversityModal={setShowUniversityModal}
 				currentUniversity={currentUniversity}
+				setToast={setToast}
 			/>
 		</>
 	)
