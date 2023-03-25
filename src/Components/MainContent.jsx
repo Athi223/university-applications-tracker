@@ -3,7 +3,7 @@ import { FirebaseAuthContext } from "../Contexts/FirebaseAuthContext"
 import { FirebaseDBContext } from "../Contexts/FirebaseDBContext"
 import { useList } from "react-firebase-hooks/database"
 import { ref } from "firebase/database"
-import { Button, Card, Form } from "react-bootstrap"
+import { Button, Card, Form, Toast, ToastContainer } from "react-bootstrap"
 import Universities from "./Universities"
 import Costs from "./Costs"
 import AddUniversity from "./AddUniversity"
@@ -16,6 +16,7 @@ export default function MainContent() {
 	const [page, setPage] = useState(false)
 	const [currency, setCurrency] = useState("INR")
 	const [exchangeRates, setExchangeRates] = useState(null)
+	const [toast, setToast] = useState({ show: false, title: "", content: "" })
 	const [snapshots, loading, error] = useList(ref(database, `/users/${user.uid}/universities/`))
 
 	useEffect(() => {
@@ -45,6 +46,8 @@ export default function MainContent() {
 						lor1: data.lor1,
 						lor2: data.lor2,
 						lor3: data.lor3,
+						gre: data.gre,
+						toefl: data.toefl,
 						fees: data.fees,
 						feestatus: data.feestatus,
 						result: data.result,
@@ -113,9 +116,25 @@ export default function MainContent() {
 			<Card className="mt-3">
 				<Card.Body>
 					<Card.Title className="text-center text-info">{page ? "Costs" : "Applications"}</Card.Title>
-					{page ? <Costs currency={currency} exchangeRates={exchangeRates} /> : <Universities />}
+					{page ? (
+						<Costs currency={currency} exchangeRates={exchangeRates} />
+					) : (
+						<Universities setToast={setToast} />
+					)}
 				</Card.Body>
 			</Card>
+			<ToastContainer className="p-3" position="bottom-end">
+				<Toast
+					onClose={() => setToast(prevToast => ({ ...prevToast, show: false }))}
+					show={toast.show}
+					delay={5000}
+					autohide>
+					<Toast.Header>
+						<strong className="me-auto">{toast.title}</strong>
+					</Toast.Header>
+					<Toast.Body>{toast.content}</Toast.Body>
+				</Toast>
+			</ToastContainer>
 			<AddUniversity showUniversityModal={showUniversityModal} setShowUniversityModal={setShowUniversityModal} />
 		</>
 	)
